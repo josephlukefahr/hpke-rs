@@ -1,5 +1,6 @@
 use alloc::{vec, vec::Vec};
 
+use ascon_hash::{AsconHash};
 use hkdf::Hkdf;
 use hpke_rs_crypto::error::Error;
 use sha2::{Sha256, Sha384, Sha512};
@@ -30,3 +31,4 @@ macro_rules! implement_hkdfs {
 implement_hkdfs!(sha256_extract, sha256_expand, Sha256, HkdfSha256);
 implement_hkdfs!(sha384_extract, sha384_expand, Sha384, HkdfSha384);
 implement_hkdfs!(sha512_extract, sha512_expand, Sha512, HkdfSha512);
+implement_hkdfs!(ascon_extract, ascon_expand, AsconHash, HkdfAsconHash256);

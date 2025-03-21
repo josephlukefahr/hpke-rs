@@ -50,6 +50,7 @@ impl HpkeCrypto for HpkeRustCrypto {
             KdfAlgorithm::HkdfSha256 => sha256_extract(salt, ikm),
             KdfAlgorithm::HkdfSha384 => sha384_extract(salt, ikm),
             KdfAlgorithm::HkdfSha512 => sha512_extract(salt, ikm),
+            KdfAlgorithm::HkdfAsconHash256 => ascon_extract(salt, ikm),
         }
     }
 
@@ -63,6 +64,7 @@ impl HpkeCrypto for HpkeRustCrypto {
             KdfAlgorithm::HkdfSha256 => sha256_expand(prk, info, output_size),
             KdfAlgorithm::HkdfSha384 => sha384_expand(prk, info, output_size),
             KdfAlgorithm::HkdfSha512 => sha512_expand(prk, info, output_size),
+            KdfAlgorithm::HkdfAsconHash256 => ascon_expand(prk, info, output_size),
         }
     }
 
@@ -171,6 +173,7 @@ impl HpkeCrypto for HpkeRustCrypto {
             AeadAlgorithm::Aes128Gcm => aes128_seal(key, nonce, aad, msg),
             AeadAlgorithm::Aes256Gcm => aes256_seal(key, nonce, aad, msg),
             AeadAlgorithm::ChaCha20Poly1305 => chacha_seal(key, nonce, aad, msg),
+            AeadAlgorithm::AsconAead128 => ascon_seal(key, nonce, aad, msg),
             AeadAlgorithm::HpkeExport => Err(Error::UnknownAeadAlgorithm),
         }
     }
@@ -186,6 +189,7 @@ impl HpkeCrypto for HpkeRustCrypto {
             AeadAlgorithm::Aes128Gcm => aes128_open(alg, key, nonce, aad, msg),
             AeadAlgorithm::Aes256Gcm => aes256_open(alg, key, nonce, aad, msg),
             AeadAlgorithm::ChaCha20Poly1305 => chacha_open(alg, key, nonce, aad, msg),
+            AeadAlgorithm::AsconAead128 => ascon_open(alg, key, nonce, aad, msg),
             AeadAlgorithm::HpkeExport => Err(Error::UnknownAeadAlgorithm),
         }
     }
@@ -227,6 +231,7 @@ impl HpkeCrypto for HpkeRustCrypto {
             AeadAlgorithm::Aes128Gcm
             | AeadAlgorithm::Aes256Gcm
             | AeadAlgorithm::ChaCha20Poly1305
+            | AeadAlgorithm::AsconAead128
             | AeadAlgorithm::HpkeExport => Ok(()),
         }
     }

@@ -1,6 +1,7 @@
 use alloc::{format, vec::Vec};
 
 use aes_gcm::{Aes128Gcm as RC_Aes128Gcm, Aes256Gcm as RC_Aes256Gcm};
+use ascon_aead::{Ascon128 as RC_Ascon128};
 use chacha20poly1305::{
     aead::{Aead, KeyInit, Payload},
     ChaCha20Poly1305 as RC_ChaCha20Poly1305,
@@ -59,3 +60,4 @@ implement_aead!(
     ChaCha20Poly1305,
     RC_ChaCha20Poly1305
 );
+implement_aead!(ascon_seal, ascon_open, AsconAead128, RC_Ascon128);

@@ -12,6 +12,8 @@ repository = "https://github.com/franziskuskiefer/hpke-rs"
 [dependencies]
 hpke-rs-crypto = { version = "0.2.0", path = "../traits" }
 # Rust crypto
+ascon-aead = "0.4"
+ascon-hash = "0.2"
 hkdf = { version = "0.12" }
 sha2 = { version = "0.10", default-features = false }
 p256 = { version = "0.13", features = [
