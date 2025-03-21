@@ -70,7 +70,8 @@ impl HpkeCrypto for HpkeRustCrypto {
 
     fn kem_derive(alg: KemAlgorithm, pk: &[u8], sk: &[u8]) -> Result<Vec<u8>, Error> {
         match alg {
-            KemAlgorithm::DhKem25519 => {
+            KemAlgorithm::DhKem25519 
+            | KemAlgorithm::DhKem25519a => {
                 if sk.len() != 32 {
                     return Err(Error::KemInvalidSecretKey);
                 }
@@ -111,7 +112,8 @@ impl HpkeCrypto for HpkeRustCrypto {
 
     fn kem_derive_base(alg: KemAlgorithm, sk: &[u8]) -> Result<Vec<u8>, Error> {
         match alg {
-            KemAlgorithm::DhKem25519 => {
+            KemAlgorithm::DhKem25519 
+            | KemAlgorithm::DhKem25519a => {
                 if sk.len() != 32 {
                     return Err(Error::KemInvalidSecretKey);
                 }
@@ -135,7 +137,8 @@ impl HpkeCrypto for HpkeRustCrypto {
     fn kem_key_gen(alg: KemAlgorithm, prng: &mut Self::HpkePrng) -> Result<Vec<u8>, Error> {
         let rng = &mut prng.rng;
         match alg {
-            KemAlgorithm::DhKem25519 => Ok(X25519StaticSecret::random_from_rng(&mut *rng)
+            KemAlgorithm::DhKem25519
+            | KemAlgorithm::DhKem25519a => Ok(X25519StaticSecret::random_from_rng(&mut *rng)
                 .to_bytes()
                 .to_vec()),
             KemAlgorithm::DhKemP256 => Ok(p256SecretKey::random(&mut *rng)
@@ -170,10 +173,10 @@ impl HpkeCrypto for HpkeRustCrypto {
         msg: &[u8],
     ) -> Result<Vec<u8>, Error> {
         match alg {
-            AeadAlgorithm::Aes128Gcm => aes128_seal(key, nonce, aad, msg),
-            AeadAlgorithm::Aes256Gcm => aes256_seal(key, nonce, aad, msg),
-            AeadAlgorithm::ChaCha20Poly1305 => chacha_seal(key, nonce, aad, msg),
-            AeadAlgorithm::AsconAead128 => ascon_seal(key, nonce, aad, msg),
+            AeadAlgorithm::Aes128Gcm => aes128_seal(alg, key, nonce, aad, msg),
+            AeadAlgorithm::Aes256Gcm => aes256_seal(alg, key, nonce, aad, msg),
+            AeadAlgorithm::ChaCha20Poly1305 => chacha_seal(alg, key, nonce, aad, msg),
+            AeadAlgorithm::AsconAead128 => ascon_seal(alg, key, nonce, aad, msg),
             AeadAlgorithm::HpkeExport => Err(Error::UnknownAeadAlgorithm),
         }
     }
@@ -220,7 +223,7 @@ impl HpkeCrypto for HpkeRustCrypto {
     /// Returns an error if the KEM algorithm is not supported by this crypto provider.
     fn supports_kem(alg: KemAlgorithm) -> Result<(), Error> {
         match alg {
-            KemAlgorithm::DhKem25519 | KemAlgorithm::DhKemP256 | KemAlgorithm::DhKemK256 => Ok(()),
+            KemAlgorithm::DhKem25519 | KemAlgorithm::DhKem25519a | KemAlgorithm::DhKemP256 | KemAlgorithm::DhKemK256 => Ok(()),
             _ => Err(Error::UnknownKemAlgorithm),
         }
     }

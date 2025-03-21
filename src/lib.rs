@@ -316,13 +316,25 @@ impl<Crypto: HpkeCrypto> Context<Crypto> {
     ///       raise MessageLimitReached
     ///     self.seq += 1
     fn increment_seq(&mut self) -> Result<(), HpkeError> {
-        if u128::from(self.sequence_number)
-            >= ((1u128 << (8 * Crypto::aead_nonce_length(self.hpke.aead_id))) - 1)
-        {
-            return Err(HpkeError::MessageLimitReached);
+        // === JWL 3/21/25
+        // OK, so with Ascon and the 16-byte nonce, this computation overflows the u128.
+        // What to do?  Go to some big-number computation?
+        // Well, we're storing this sequence number as a u32 anyway, so will it ever
+        // get anywhere close to the u128 overflow?  I'll say no and cap the nonce at
+        // u32.  Sue me.
+        // if u128::from(self.sequence_number)
+        //     >= ((1u128 << (8 * Crypto::aead_nonce_length(self.hpke.aead_id))) - 1)
+        // {
+        //     return Err(HpkeError::MessageLimitReached);
+        // }
+        // ===
+        match self.sequence_number.checked_add(1) {
+            Some(rhs) => {
+                self.sequence_number = rhs;
+                Ok(())
+            }
+            None => Err(HpkeError::MessageLimitReached),
         }
-        self.sequence_number += 1;
-        Ok(())
     }
 }
 

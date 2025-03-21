@@ -13,15 +13,16 @@ use super::HpkeRustCrypto;
 macro_rules! implement_aead {
     ($name_seal: ident, $name_open: ident, $name:ident, $algorithm:ident) => {
         pub(crate) fn $name_seal(
+            alg: AeadAlgorithm,
             key: &[u8],
             nonce: &[u8],
             aad: &[u8],
             msg: &[u8],
         ) -> Result<Vec<u8>, Error> {
-            if nonce.len() != 12 {
+            let nonce_length = HpkeRustCrypto::aead_nonce_length(alg);
+            if nonce.len() != nonce_length {
                 return Err(Error::AeadInvalidNonce);
             }
-
             let cipher = $algorithm::new(key.into());
             cipher
                 .encrypt(nonce.into(), Payload { msg, aad })

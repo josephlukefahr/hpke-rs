@@ -58,7 +58,8 @@ pub(super) fn derive_key_pair<Crypto: HpkeCrypto>(
     let dkp_prk = labeled_extract::<Crypto>(alg.into(), &[], suite_id, "dkp_prk", ikm);
 
     let sk = match alg {
-        KemAlgorithm::DhKem25519 => labeled_expand::<Crypto>(
+        KemAlgorithm::DhKem25519 
+        | KemAlgorithm::DhKem25519a => labeled_expand::<Crypto>(
             alg.into(),
             &dkp_prk,
             suite_id,
