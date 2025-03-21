@@ -24,7 +24,6 @@ pub(crate) fn encaps<Crypto: HpkeCrypto>(
         | KemAlgorithm::DhKemP384
         | KemAlgorithm::DhKemP521
         | KemAlgorithm::DhKem25519
-        | KemAlgorithm::DhKem25519a
         | KemAlgorithm::DhKem448 => {
             dh_kem::encaps::<Crypto>(alg, pk_r, &ciphersuite(alg), randomness)
         }
@@ -42,7 +41,6 @@ pub(crate) fn decaps<Crypto: HpkeCrypto>(
         | KemAlgorithm::DhKemP384
         | KemAlgorithm::DhKemP521
         | KemAlgorithm::DhKem25519
-        | KemAlgorithm::DhKem25519a
         | KemAlgorithm::DhKem448 => dh_kem::decaps::<Crypto>(alg, enc, sk_r, &ciphersuite(alg)),
     }
 }
@@ -59,7 +57,6 @@ pub(crate) fn auth_encaps<Crypto: HpkeCrypto>(
         | KemAlgorithm::DhKemP384
         | KemAlgorithm::DhKemP521
         | KemAlgorithm::DhKem25519
-        | KemAlgorithm::DhKem25519a
         | KemAlgorithm::DhKem448 => {
             dh_kem::auth_encaps::<Crypto>(alg, pk_r, sk_s, &ciphersuite(alg), randomness)
         }
@@ -78,7 +75,6 @@ pub(crate) fn auth_decaps<Crypto: HpkeCrypto>(
         | KemAlgorithm::DhKemP384
         | KemAlgorithm::DhKemP521
         | KemAlgorithm::DhKem25519
-        | KemAlgorithm::DhKem25519a
         | KemAlgorithm::DhKem448 => {
             dh_kem::auth_decaps::<Crypto>(alg, enc, sk_r, pk_s, &ciphersuite(alg))
         }
@@ -95,7 +91,6 @@ pub(crate) fn key_gen<Crypto: HpkeCrypto>(
         | KemAlgorithm::DhKemP384
         | KemAlgorithm::DhKemP521
         | KemAlgorithm::DhKem25519
-        | KemAlgorithm::DhKem25519a
         | KemAlgorithm::DhKem448 => dh_kem::key_gen::<Crypto>(alg, prng),
     }
 }
