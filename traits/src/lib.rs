@@ -46,7 +46,6 @@ pub trait HpkeCrypto: core::fmt::Debug + Send + Sync {
             types::KdfAlgorithm::HkdfSha256 => 32,
             types::KdfAlgorithm::HkdfSha384 => 48,
             types::KdfAlgorithm::HkdfSha512 => 64,
-            types::KdfAlgorithm::HkdfAsconHash256 => 32,
         }
     }
 
@@ -99,7 +98,6 @@ pub trait HpkeCrypto: core::fmt::Debug + Send + Sync {
             AeadAlgorithm::Aes128Gcm => 16,
             AeadAlgorithm::Aes256Gcm => 32,
             AeadAlgorithm::ChaCha20Poly1305 => 32,
-            AeadAlgorithm::AsconAead128 => 16,
             AeadAlgorithm::HpkeExport => 0,
         }
     }
@@ -112,7 +110,6 @@ pub trait HpkeCrypto: core::fmt::Debug + Send + Sync {
             AeadAlgorithm::Aes128Gcm => 12,
             AeadAlgorithm::Aes256Gcm => 12,
             AeadAlgorithm::ChaCha20Poly1305 => 12,
-            AeadAlgorithm::AsconAead128 => 16,
             AeadAlgorithm::HpkeExport => 0,
         }
     }
@@ -125,7 +122,6 @@ pub trait HpkeCrypto: core::fmt::Debug + Send + Sync {
             AeadAlgorithm::Aes128Gcm => 16,
             AeadAlgorithm::Aes256Gcm => 16,
             AeadAlgorithm::ChaCha20Poly1305 => 16,
-            AeadAlgorithm::AsconAead128 => 16,
             AeadAlgorithm::HpkeExport => 0,
         }
     }
