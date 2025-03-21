@@ -27,6 +27,9 @@ pub enum KemAlgorithm {
     /// DH KEM on x25519
     DhKem25519 = 0x0020,
 
+    /// DH KEM on x25519, Ascon-based HKDF
+    DhKem25519a = 0x0101,
+
     /// DH KEM on x448
     DhKem448 = 0x0021,
 }
@@ -61,6 +64,7 @@ impl KemAlgorithm {
             KemAlgorithm::DhKemP521 => 66,
             KemAlgorithm::DhKemK256 => 32,
             KemAlgorithm::DhKem25519 => 32,
+            KemAlgorithm::DhKem25519a => 32,
             KemAlgorithm::DhKem448 => 56,
         }
     }
@@ -73,6 +77,7 @@ impl KemAlgorithm {
             KemAlgorithm::DhKemP521 => 64,
             KemAlgorithm::DhKemK256 => 32,
             KemAlgorithm::DhKem25519 => 32,
+            KemAlgorithm::DhKem25519a => 32,
             KemAlgorithm::DhKem448 => 64,
         }
     }
@@ -92,6 +97,9 @@ pub enum AeadAlgorithm {
     /// ChaCha20 Poly1305
     ChaCha20Poly1305 = 0x0003,
 
+    /// Ascon-AEAD 128
+    AsconAead128 = 0x0101,
+
     /// HPKE Export-only
     HpkeExport = 0xFFFF,
 }
@@ -109,6 +117,7 @@ impl core::convert::TryFrom<u16> for AeadAlgorithm {
             0x0001 => Ok(AeadAlgorithm::Aes128Gcm),
             0x0002 => Ok(AeadAlgorithm::Aes256Gcm),
             0x0003 => Ok(AeadAlgorithm::ChaCha20Poly1305),
+            0x0101 => Ok(AeadAlgorithm::AsconAead128),
             0xFFFF => Ok(AeadAlgorithm::HpkeExport),
             _ => Err(Self::Error::UnknownAeadAlgorithm),
         }
@@ -125,6 +134,7 @@ impl AeadAlgorithm {
             AeadAlgorithm::Aes128Gcm => 16,
             AeadAlgorithm::Aes256Gcm => 16,
             AeadAlgorithm::ChaCha20Poly1305 => 16,
+            AeadAlgorithm::AsconAead128 => 16,
             AeadAlgorithm::HpkeExport => 0,
         }
     }
@@ -138,6 +148,7 @@ impl AeadAlgorithm {
             AeadAlgorithm::Aes128Gcm => 16,
             AeadAlgorithm::Aes256Gcm => 32,
             AeadAlgorithm::ChaCha20Poly1305 => 32,
+            AeadAlgorithm::AsconAead128 => 16,
             AeadAlgorithm::HpkeExport => 0,
         }
     }
@@ -154,6 +165,7 @@ impl AeadAlgorithm {
             AeadAlgorithm::Aes128Gcm => 12,
             AeadAlgorithm::Aes256Gcm => 12,
             AeadAlgorithm::ChaCha20Poly1305 => 12,
+            AeadAlgorithm::AsconAead128 => 16,
             AeadAlgorithm::HpkeExport => 0,
         }
     }
@@ -175,6 +187,9 @@ pub enum KdfAlgorithm {
 
     /// HKDF SHA 512
     HkdfSha512 = 0x0003,
+
+    /// HKDF Ascon-Hash 256
+    HkdfAsconHash256 = 0x0101,
 }
 
 impl core::fmt::Display for KdfAlgorithm {
@@ -190,6 +205,7 @@ impl core::convert::TryFrom<u16> for KdfAlgorithm {
             0x0001 => Ok(KdfAlgorithm::HkdfSha256),
             0x0002 => Ok(KdfAlgorithm::HkdfSha384),
             0x0003 => Ok(KdfAlgorithm::HkdfSha512),
+            0x0101 => Ok(KdfAlgorithm::HkdfAsconHash256),
             _ => Err(Self::Error::UnknownKdfAlgorithm),
         }
     }
@@ -203,6 +219,7 @@ impl From<KemAlgorithm> for KdfAlgorithm {
             KemAlgorithm::DhKemP521 => KdfAlgorithm::HkdfSha512,
             KemAlgorithm::DhKemK256 => KdfAlgorithm::HkdfSha256,
             KemAlgorithm::DhKem25519 => KdfAlgorithm::HkdfSha256,
+            KemAlgorithm::DhKem25519a => KdfAlgorithm::HkdfAsconHash256,
             KemAlgorithm::DhKem448 => KdfAlgorithm::HkdfSha512,
         }
     }
